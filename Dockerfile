@@ -1,6 +1,5 @@
-ARG CUDA_VERSION=10.1
+ARG CUDA_VERSION=10.0
 ARG PYTHON_VERSION=3.6
-ARG ROOT_PASSWORD=pass
 FROM nvidia/cuda:${CUDA_VERSION}-cudnn7-runtime-ubuntu18.04
 
 # install the stuff you'd expect to have + ssh server
@@ -17,8 +16,7 @@ RUN dpkg --install gcsfuse_0.27.0_amd64.deb
 
 # install a very very insecure ssh server :p
 RUN mkdir /var/run/sshd
-# this sets no password
-RUN echo 'root:${ROOT_PASSWORD}' | chpasswd
+RUN echo root:pass | chpasswd
 RUN sed -i '1s/^/PermitRootLogin prohibit-password\n/' /etc/ssh/sshd_config
 RUN sed -i '1s/^/PermitRootLogin yes\n/' /etc/ssh/sshd_config
 RUN sed -i '1s/^/PermitEmptyPasswords yes\n/' /etc/ssh/sshd_config
